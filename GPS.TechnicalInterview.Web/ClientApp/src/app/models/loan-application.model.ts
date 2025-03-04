@@ -11,8 +11,8 @@ export interface LoanApplication {
   status: string;
   loanTerms: {
     amount: number;
-    terms: number;
-    monthlyPayment: number;
+    term: number;
+    monthlyPaymentAmount: number;
   };
   dateApplied?: string;
 }

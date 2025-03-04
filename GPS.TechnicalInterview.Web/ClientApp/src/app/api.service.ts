@@ -6,13 +6,30 @@ import { LoanApplication } from "./models/loan-application.model";
 @Injectable({ providedIn: "root" })
 export class ApiService {
   private apiUrl = "https://localhost:5001/ApplicationManager";
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {}
 
   getAllApplications(): Observable<LoanApplication[]> {
-      return this.http.get<LoanApplication[]>(`${this.apiUrl}/GetAllApplications`)
+    return this.http.get<LoanApplication[]>(
+      `${this.apiUrl}/GetAllApplications`
+    );
   }
 
-  createNewLoanApplication(loanApplication: any): Observable<any> {
-      return this.http.post(`${this.apiUrl}/CreateApplication`, loanApplication);
+  createNewLoanApplication(
+    loanApplication: LoanApplication
+  ): Observable<LoanApplication> {
+    return this.http.post<LoanApplication>(
+      `${this.apiUrl}/CreateApplication`,
+      loanApplication
+    );
   }
+
+  updateLoanApplication(
+    loanApplication: LoanApplication
+  ): Observable<LoanApplication> {
+    return this.http.put<LoanApplication>(
+      `${this.apiUrl}/UpdateApplication`,
+      loanApplication
+    );
+  }
+  
 }

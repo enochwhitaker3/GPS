@@ -14,6 +14,7 @@ import { ApplicationsComponent } from "./applications/applications.component";
 import { MatMenuModule } from "@angular/material/menu";
 import { MatButtonModule } from "@angular/material/button";
 import { MatIconModule } from "@angular/material/icon";
+import { EditApplicationComponent } from "./edit-application/edit-application.component";
 
 @NgModule({
   declarations: [
@@ -21,6 +22,7 @@ import { MatIconModule } from "@angular/material/icon";
     NavMenuComponent,
     ApplicationsComponent,
     CreateApplicationComponent,
+    EditApplicationComponent,
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: "ng-cli-universal" }),

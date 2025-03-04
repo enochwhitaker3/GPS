@@ -1,18 +1,20 @@
 import { Component, OnInit } from "@angular/core";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
-import { ApiService } from "../api.service";
 import { MatSnackBar } from "@angular/material/snack-bar";
-import { Router } from "@angular/router";
+import { ActivatedRoute, Router } from "@angular/router";
+import { ApiService } from "../api.service";
 import { LoanApplication } from "../models/loan-application.model";
 
 @Component({
-  selector: "app-create-application",
-  templateUrl: "./create-application.component.html",
-  styleUrls: ["./create-application.component.scss"],
+  selector: "app-edit-application",
+  templateUrl: "./edit-application.component.html",
+  styleUrls: ["./edit-application.component.scss"],
 })
-export class CreateApplicationComponent {
+export class EditApplicationComponent implements OnInit {
   public applicationForm: FormGroup;
   public statuses: Array<string> = ["New", "Approved", "Funded"];
+  public applicationId!: string;
+  public application!: LoanApplication;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -33,7 +35,7 @@ export class CreateApplicationComponent {
         ],
       ],
       email: ["", [Validators.required, Validators.email]],
-      applicationNumber: ["", [Validators.required]],
+      applicationNumber: [{ value: "", disabled: true }, [Validators.required]],
       status: ["New"],
       amount: ["", [Validators.required, Validators.min(1)]],
       monthlyPayAmount: [{ value: "", disabled: true }],
@@ -54,6 +56,29 @@ export class CreateApplicationComponent {
       .get("terms")
       ?.valueChanges.subscribe(() => this.updateMonthlyPayment());
   }
+
+  ngOnInit(): void {
+    const state = history.state;
+    if (state && state.application) {
+      this.application = state.application;
+      this.setFormValues();
+    }
+  }
+
+  private setFormValues(): void {
+    console.log(this.application, "YEAH!");
+    this.applicationForm.patchValue({
+      firstName: this.application.personalInformation.name.first,
+      lastName: this.application.personalInformation.name.last,
+      phoneNumber: this.application.personalInformation.phoneNumber,
+      email: this.application.personalInformation.email,
+      applicationNumber: this.application.applicationNumber,
+      status: this.application.status,
+      amount: this.application.loanTerms.amount,
+      terms: this.application.loanTerms.term,
+    });
+  }
+
   get firstName() {
     return this.applicationForm.get("firstName");
   }
@@ -115,10 +140,9 @@ export class CreateApplicationComponent {
           ),
         },
       };
-
-      this.apiService.createNewLoanApplication(newApplication).subscribe(
+      this.apiService.updateLoanApplication(newApplication).subscribe(
         (response) => {
-          this.snackBar.open("Created successfully", "Close", {
+          this.snackBar.open("Saved successfully", "Close", {
             duration: 3000,
           });
           this.router.navigate(["/applications"]);

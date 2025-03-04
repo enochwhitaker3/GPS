@@ -30,13 +30,6 @@ namespace GPS.ApplicationManager.Web.Controllers
       return new List<LoanApplication>();
     }
 
-    [HttpGet("GetAllApplications")]
-    public async Task<IActionResult> GetAllApplications()
-    {
-      var applications = await GetApplicationsFromFileAsync();
-      return Ok(applications);
-    }
-
     [HttpPost("[action]")]
     public async Task<IActionResult> CreateApplication([FromBody] LoanApplication loanApplication)
     {
@@ -59,6 +52,41 @@ namespace GPS.ApplicationManager.Web.Controllers
       return Ok(new { message = "Created Successfully." });
     }
 
-    // TODO: Add your CRUD (Read, Update, Delete) methods here:
+    [HttpGet("GetAllApplications")]
+    public async Task<IActionResult> GetAllApplications()
+    {
+      var applications = await GetApplicationsFromFileAsync();
+      return Ok(applications);
+    }
+
+    [HttpPut("[action]")]
+    public async Task<IActionResult> UpdateApplication([FromBody] LoanApplication updatedApplication)
+    {
+        if (updatedApplication == null ||
+            string.IsNullOrEmpty(updatedApplication.PersonalInformation.Name.First) ||
+            string.IsNullOrEmpty(updatedApplication.PersonalInformation.Name.Last) ||
+            string.IsNullOrEmpty(updatedApplication.PersonalInformation.PhoneNumber) ||
+            string.IsNullOrEmpty(updatedApplication.PersonalInformation.Email) ||
+            string.IsNullOrEmpty(updatedApplication.ApplicationNumber) ||
+            updatedApplication.LoanTerms.Amount <= 0)
+        {
+            return BadRequest("Invalid application data. All fields are required and must be valid.");
+        }
+
+        updatedApplication.DateApplied = DateTime.UtcNow;
+        var applications = await GetApplicationsFromFileAsync();
+        var existingApplicationIndex = applications.FindIndex(a => a.ApplicationNumber == updatedApplication.ApplicationNumber);
+
+        if (existingApplicationIndex == -1)
+        {
+            return NotFound("Hmm...No application found with given id");
+        }
+        applications[existingApplicationIndex] = updatedApplication;
+        var json = JsonSerializer.Serialize(applications);
+        await System.IO.File.WriteAllTextAsync(_filePath, json);
+
+        return Ok(new { message = "Updated Successfully." });
+    }
+
   }
 }
