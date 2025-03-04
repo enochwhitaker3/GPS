@@ -20,6 +20,14 @@ namespace GPS.ApplicationManager.Web
     // This method gets called by the runtime. Use this method to add services to the container.
     public void ConfigureServices(IServiceCollection services)
     {
+      services.AddCors(options =>
+      {
+          options.AddPolicy("AllowLocalhost",
+              builder => builder.WithOrigins("https://localhost:5001", "http://localhost:5000")
+                              .AllowAnyMethod()
+                              .AllowAnyHeader());
+      });
+
       services.AddControllersWithViews();
       // In production, the Angular files will be served from this directory
       services.AddSpaStaticFiles(configuration =>
@@ -50,6 +58,7 @@ namespace GPS.ApplicationManager.Web
       }
 
       app.UseRouting();
+      app.UseCors("AllowLocalhost");  
 
       app.UseEndpoints(endpoints =>
       {
