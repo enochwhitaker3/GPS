@@ -30,6 +30,13 @@ namespace GPS.ApplicationManager.Web.Controllers
       return new List<LoanApplication>();
     }
 
+    [HttpGet("GetAllApplications")]
+    public async Task<IActionResult> GetAllApplications()
+    {
+      var applications = await GetApplicationsFromFileAsync();
+      return Ok(applications);
+    }
+
     [HttpPost("[action]")]
     public async Task<IActionResult> CreateApplication([FromBody] LoanApplication loanApplication)
     {
