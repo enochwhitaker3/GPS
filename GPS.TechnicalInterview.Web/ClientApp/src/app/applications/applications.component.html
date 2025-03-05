@@ -65,7 +65,12 @@
               >
                 Edit
               </button>
-              <button mat-menu-item>Delete</button>
+              <button
+                mat-menu-item
+                (click)="openDeleteConfirmation(application.applicationNumber)"
+              >
+                Delete
+              </button>
             </mat-menu>
           </td>
         </ng-container>

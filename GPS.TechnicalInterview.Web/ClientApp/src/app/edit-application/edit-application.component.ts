@@ -143,13 +143,13 @@ export class EditApplicationComponent implements OnInit {
       this.apiService.updateLoanApplication(newApplication).subscribe(
         (response) => {
           this.snackBar.open("Saved successfully", "Close", {
-            duration: 3000,
+            duration: 5000,
           });
           this.router.navigate(["/applications"]);
         },
         (error) => {
           this.snackBar.open("Hmm..Something went wrong", "Close", {
-            duration: 300,
+            duration: 5000,
           });
         }
       );

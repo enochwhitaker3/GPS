@@ -119,13 +119,14 @@ export class CreateApplicationComponent {
       this.apiService.createNewLoanApplication(newApplication).subscribe(
         (response) => {
           this.snackBar.open("Created successfully", "Close", {
-            duration: 3000,
+            duration: 5000,
+            panelClass: ["snackbar-success"],
           });
           this.router.navigate(["/applications"]);
         },
         (error) => {
           this.snackBar.open("Hmm..Something went wrong", "Close", {
-            duration: 300,
+            duration: 5000,
           });
         }
       );

@@ -88,5 +88,22 @@ namespace GPS.ApplicationManager.Web.Controllers
         return Ok(new { message = "Updated Successfully." });
     }
 
-  }
+    [HttpDelete("DeleteApplication/{applicationNumber}")]
+    public async Task<IActionResult> DeleteApplication(string applicationNumber)
+    {
+        var applications = await GetApplicationsFromFileAsync();
+        var applicationToRemove = applications.Find(a => a.ApplicationNumber == applicationNumber);
+
+        if (applicationToRemove == null)
+        {
+            return NotFound("Hmm...No application found with given id");
+        }
+
+        applications.Remove(applicationToRemove);
+        var json = JsonSerializer.Serialize(applications);
+        await System.IO.File.WriteAllTextAsync(_filePath, json);
+
+        return Ok(new { message = "Deleted Successfully." });
+    }
+  } 
 }

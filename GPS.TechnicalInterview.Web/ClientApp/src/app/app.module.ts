@@ -14,7 +14,9 @@ import { ApplicationsComponent } from "./applications/applications.component";
 import { MatMenuModule } from "@angular/material/menu";
 import { MatButtonModule } from "@angular/material/button";
 import { MatIconModule } from "@angular/material/icon";
+import { MatDialogModule } from "@angular/material/dialog";
 import { EditApplicationComponent } from "./edit-application/edit-application.component";
+import { DeleteConfirmationComponent } from "./delete-confirmation/delete-confirmation.component";
 
 @NgModule({
   declarations: [
@@ -23,6 +25,7 @@ import { EditApplicationComponent } from "./edit-application/edit-application.co
     ApplicationsComponent,
     CreateApplicationComponent,
     EditApplicationComponent,
+    DeleteConfirmationComponent,
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: "ng-cli-universal" }),
@@ -35,6 +38,7 @@ import { EditApplicationComponent } from "./edit-application/edit-application.co
     MatMenuModule,
     MatButtonModule,
     MatIconModule,
+    MatDialogModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

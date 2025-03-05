@@ -31,5 +31,10 @@ export class ApiService {
       loanApplication
     );
   }
-  
+
+  deleteLoanApplication(applicationNumber: string): Observable<void> {
+    return this.http.delete<void>(
+      `${this.apiUrl}/DeleteApplication/${applicationNumber}`
+    );
+  }
 }
